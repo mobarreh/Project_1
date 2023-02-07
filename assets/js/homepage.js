@@ -1,21 +1,21 @@
 var userFormEl = document.querySelector('#user-form');
 var languageButtonsEl = document.querySelector('#language-buttons');
-var nameInputEl = document.querySelector('#username');
+var nameInputEl = document.querySelector('#recipes');
 var repoContainerEl = document.querySelector('#repos-container');
 var repoSearchTerm = document.querySelector('#repo-search-term');
 
 var formSubmitHandler = function (event) {
   event.preventDefault();
 
-  var username = nameInputEl.value.trim();
+  var recipes = nameInputEl.value.trim();
 
-  if (username) {
-    getUserRepos(username);
+  if (recipes) {
+    getUserRepos(recipes);
 
     repoContainerEl.textContent = '';
     nameInputEl.value = '';
   } else {
-    alert('Please enter a GitHub username');
+    alert('Please enter a recipes');
   }
 };
 
