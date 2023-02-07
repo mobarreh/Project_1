@@ -30,7 +30,7 @@ var buttonClickHandler = function (event) {
 };
 
 var getUserRepos = function (user) {
-  var apiUrl = 'https://api.github.com/users/' + user + '/repos';
+  var apiUrl = 'www.themealdb.com/api/json/v1/1/search.php?s=Arrabiata' + user + '/repos';
 
   fetch(apiUrl)
     .then(function (response) {
@@ -97,4 +97,4 @@ var displayRepos = function (repos, searchTerm) {
 };
 
 userFormEl.addEventListener('submit', formSubmitHandler);
-languageButtonsEl.addEventListener('click', buttonClickHandler);
+//languageButtonsEl.addEventListener('click', buttonClickHandler);
