@@ -1,100 +1,70 @@
-var userFormEl = document.querySelector('#user-form');
-var languageButtonsEl = document.querySelector('#language-buttons');
-var nameInputEl = document.querySelector('#recipes');
-var repoContainerEl = document.querySelector('#repos-container');
-var repoSearchTerm = document.querySelector('#repo-search-term');
+let result = document.getElementById("result");
+let searchBtn = document.getElementById("search-btn");
+let url = "https://www.themealdb.com/api/json/v1/1/search.php?s=";
 
-var formSubmitHandler = function (event) {
-  event.preventDefault();
-
-  var recipes = nameInputEl.value.trim();
-
-  if (recipes) {
-    getUserRepos(recipes);
-
-    repoContainerEl.textContent = '';
-    nameInputEl.value = '';
+searchBtn.addEventListener("click", () => {
+  let userInp = document.getElementById("user-inp").value;
+  if (userInp.length == 0) {
+    result.innerHTML = `<h3>Input Field Cannot Be Empty</h3>`;
   } else {
-    alert('Please enter a recipes');
-  }
-};
+    fetch(url + userInp)
+      .then((response) => response.json())
+      .then((data) => {
+        let myMeal = data.meals[0];
+        console.log(myMeal);
+        console.log(myMeal.strMealThumb);
+        console.log(myMeal.strMeal);
+        console.log(myMeal.strArea);
+        console.log(myMeal.strInstructions);
+        let count = 1;
+        let ingredients = [];
+        for (let i in myMeal) {
+          let ingredient = "";
+          let measure = "";
+          if (i.startsWith("strInstructions") && myMeal[i]) {
+            ingredient = myMeal[i];
+            measure = myMeal[`strMeasure` + count];
+            count += 1;
+            ingredients.push(`${measure} ${ingredient}`);
+          }
+        }
+        console.log(ingredients);
 
-var buttonClickHandler = function (event) {
-  var language = event.target.getAttribute('data-language');
+        result.innerHTML = `
+    <img src=${myMeal.strMealThumb}>
+    <div class="details">
+        <h2>${myMeal.strMeal}</h2>
+        <h4>${myMeal.strArea}</h4>
+    </div>
+    <div id="ingredient-con"></div>
+    <div id="recipe">
+        <button id="hide-recipe">X</button>
+        <p id="instructions">${myMeal.strInstructions}</p>
+    </div>
+    <button id="show-recipe">View Recipe</button>
+    `;
+        let ingredientCon = document.getElementById("ingredient-con");
+        let parent = document.createElement("ul");
+        let recipe = document.getElementById("recipe");
+        let hideRecipe = document.getElementById("hide-recipe");
+        let showRecipe = document.getElementById("show-recipe");
 
-  if (language) {
-    getFeaturedRepos(language);
-
-    repoContainerEl.textContent = '';
-  }
-};
-
-var getUserRepos = function (user) {
-  var apiUrl = 'www.themealdb.com/api/json/v1/1/search.php?s=Arrabiata' + user + '/repos';
-
-  fetch(apiUrl)
-    .then(function (response) {
-      if (response.ok) {
-        response.json().then(function (data) {
-          displayRepos(data, user);
+        ingredients.forEach((i) => {
+          let child = document.createElement("li");
+          child.innerText = i;
+          parent.appendChild(child);
+          ingredientCon.appendChild(parent);
         });
-      } else {
-        alert('Error: ' + response.statusText);
-      }
-    })
-    .catch(function (error) {
-      alert('Unable to connect to GitHub');
-    });
-};
 
-var getFeaturedRepos = function (language) {
-  var apiUrl = 'https://api.github.com/search/repositories?q=' + language + '+is:featured&sort=help-wanted-issues';
-
-  fetch(apiUrl).then(function (response) {
-    if (response.ok) {
-      response.json().then(function (data) {
-        displayRepos(data.items, language);
+        hideRecipe.addEventListener("click", () => {
+          recipe.style.display = "none";
+        });
+        showRecipe.addEventListener("click", () => {
+          recipe.style.display = "block";
+        });
+      })
+      .catch(() => {
+        result.innerHTML = `<h3>Invalid Input</h3>`;
       });
-    } else {
-      alert('Error: ' + response.statusText);
-    }
-  });
-};
-
-var displayRepos = function (repos, searchTerm) {
-  if (repos.length === 0) {
-    repoContainerEl.textContent = 'No repositories found.';
-    return;
   }
-
-  repoSearchTerm.textContent = searchTerm;
-
-  for (var i = 0; i < repos.length; i++) {
-    var repoName = repos[i].owner.login + '/' + repos[i].name;
-
-    var repoEl = document.createElement('div');
-    repoEl.classList = 'list-item flex-row justify-space-between align-center';
-
-    var titleEl = document.createElement('span');
-    titleEl.textContent = repoName;
-
-    repoEl.appendChild(titleEl);
-
-    var statusEl = document.createElement('span');
-    statusEl.classList = 'flex-row align-center';
-
-    if (repos[i].open_issues_count > 0) {
-      statusEl.innerHTML =
-        "<i class='fas fa-times status-icon icon-danger'></i>" + repos[i].open_issues_count + ' issue(s)';
-    } else {
-      statusEl.innerHTML = "<i class='fas fa-check-square status-icon icon-success'></i>";
-    }
-
-    repoEl.appendChild(statusEl);
-
-    repoContainerEl.appendChild(repoEl);
-  }
-};
-
-userFormEl.addEventListener('submit', formSubmitHandler);
-//languageButtonsEl.addEventListener('click', buttonClickHandler);
+});
