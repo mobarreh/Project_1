@@ -18,18 +18,18 @@ searchBtn.addEventListener("click", () => {
         console.log(myMeal.strArea);
         console.log(myMeal.strInstructions);
         let count = 1;
-        let ingredients = [];
+        let instructions = [];
         for (let i in myMeal) {
-          let ingredient = "";
+          let instruction = "";
           let measure = "";
           if (i.startsWith("strInstructions") && myMeal[i]) {
-            ingredient = myMeal[i];
+            instruction = myMeal[i];
             measure = myMeal[`strMeasure` + count];
             count += 1;
-            ingredients.push(`${measure} ${ingredient}`);
+            instructions.push(`${measure} ${instruction}`);
           }
         }
-        console.log(ingredients);
+        console.log(instructions);
 
         result.innerHTML =`
     <img src=${myMeal.strMealThumb}>
@@ -41,7 +41,7 @@ searchBtn.addEventListener("click", () => {
         <p id="instructions">${myMeal.strInstructions}</p>
     </div>`;
 
-      })
+  })
       .catch(() => {
         result.innerHTML = `<h3>Invalid Input</h3>`;
       });
