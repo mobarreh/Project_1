@@ -18,52 +18,30 @@ searchBtn.addEventListener("click", () => {
         console.log(myMeal.strArea);
         console.log(myMeal.strInstructions);
         let count = 1;
-        let ingredients = [];
+        let instructions = [];
         for (let i in myMeal) {
-          let ingredient = "";
+          let instruction = "";
           let measure = "";
           if (i.startsWith("strInstructions") && myMeal[i]) {
-            ingredient = myMeal[i];
+            instruction = myMeal[i];
             measure = myMeal[`strMeasure` + count];
             count += 1;
-            ingredients.push(`${measure} ${ingredient}`);
+            instructions.push(`${measure} ${instruction}`);
           }
         }
-        console.log(ingredients);
+        console.log(instructions);
 
-        result.innerHTML = `
+        result.innerHTML =`
     <img src=${myMeal.strMealThumb}>
     <div class="details">
         <h2>${myMeal.strMeal}</h2>
         <h4>${myMeal.strArea}</h4>
     </div>
-    <div id="ingredient-con"></div>
-    <div id="recipe">
-        <button id="hide-recipe">X</button>
+    <div>
         <p id="instructions">${myMeal.strInstructions}</p>
-    </div>
-    <button id="show-recipe">View Recipe</button>
-    `;
-        let ingredientCon = document.getElementById("ingredient-con");
-        let parent = document.createElement("ul");
-        let recipe = document.getElementById("recipe");
-        let hideRecipe = document.getElementById("hide-recipe");
-        let showRecipe = document.getElementById("show-recipe");
+    </div>`;
 
-        ingredients.forEach((i) => {
-          let child = document.createElement("li");
-          child.innerText = i;
-          parent.appendChild(child);
-          ingredientCon.appendChild(parent);
-        });
-
-        hideRecipe.addEventListener("click", () => {
-          recipe.style.display = "none";
-        });
-        showRecipe.addEventListener("click", () => {
-          recipe.style.display = "block";
-        });
-      })
+  })
       .catch(() => {
         result.innerHTML = `<h3>Invalid Input</h3>`;
       });
