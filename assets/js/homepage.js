@@ -2,10 +2,16 @@ let result = document.getElementById("result");
 let searchBtn = document.getElementById("search-btn");
 let url = "https://www.themealdb.com/api/json/v1/1/search.php?s=";
 
-searchBtn.addEventListener("click", () => {
-  let userInp = document.getElementById("user-inp").value;
-  if (userInp.length == 0) {
-    result.innerHTML = `<h3>Input Field Cannot Be Empty</h3>`;
+var formSubmitHandler = function (event) {
+  event.preventDefault();
+
+  var recipes = nameInputEl.value.trim();
+
+  if (recipes) {
+    getUserRepos(recipes);
+
+    repoContainerEl.textContent = '';
+    nameInputEl.value = '';
   } else {
     fetch(url + userInp)
       .then((response) => response.json())
@@ -49,12 +55,8 @@ searchBtn.addEventListener("click", () => {
         let hideRecipe = document.getElementById("hide-recipe");
         let showRecipe = document.getElementById("show-recipe");
 
-        ingredients.forEach((i) => {
-          let child = document.createElement("li");
-          child.innerText = i;
-          parent.appendChild(child);
-          ingredientCon.appendChild(parent);
-        });
+var getUserRepos = function (user) {
+  var apiUrl = 'https://api.github.com/users/' + user + '/repos';
 
         hideRecipe.addEventListener("click", () => {
           recipe.style.display = "none";
@@ -62,9 +64,32 @@ searchBtn.addEventListener("click", () => {
         showRecipe.addEventListener("click", () => {
           recipe.style.display = "block";
         });
-      })
-      .catch(() => {
-        result.innerHTML = `<h3>Invalid Input</h3>`;
+      } else {
+        alert('Error: ' + response.statusText);
+      }
+    })
+    .catch(function (error) {
+      alert('Unable to connect to GitHub');
+    });
+};
+
+var getFeaturedRepos = function (language) {
+  var apiUrl = 'https://api.github.com/search/repositories?q=' + language + '+is:featured&sort=help-wanted-issues';
+
+  fetch(apiUrl).then(function (response) {
+    if (response.ok) {
+      response.json().then(function (data) {
+        displayRepos(data.items, language);
       });
+    } else {
+      alert('Error: ' + response.statusText);
+    }
+  });
+};
+
+var displayRepos = function (repos, searchTerm) {
+  if (repos.length === 0) {
+    repoContainerEl.textContent = 'No repositories found.';
+    return;
   }
 });
