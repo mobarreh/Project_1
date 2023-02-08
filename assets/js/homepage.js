@@ -3,6 +3,7 @@ let result = document.getElementById("result");
 let searchBtn = document.getElementById("search-btn");
 let url = "https://www.themealdb.com/api/json/v1/1/search.php?s=";
 
+//Excute MealDB API search once button is clicked
 searchBtn.addEventListener("click", () => {
   let userInp = document.getElementById("user-inp").value;
   if (userInp.length == 0) {
@@ -12,11 +13,6 @@ searchBtn.addEventListener("click", () => {
       .then((response) => response.json())
       .then((data) => {
         let myMeal = data.meals[0];
-        console.log(myMeal);
-        console.log(myMeal.strMealThumb);
-        console.log(myMeal.strMeal);
-        console.log(myMeal.strArea);
-        console.log(myMeal.strInstructions);
         let count = 1;
         let instructions = [];
         for (let i in myMeal) {
@@ -29,19 +25,13 @@ searchBtn.addEventListener("click", () => {
             instructions.push(`${measure} ${instruction}`);
           }
         }
-        console.log(instructions);
-
-        result.innerHTML =`
-    <img src=${myMeal.strMealThumb}>
-    <div class="details">
-        <h2>${myMeal.strMeal}</h2>
-        <h4>${myMeal.strArea}</h4>
-    </div>
-    <div>
-        <p id="instructions">${myMeal.strInstructions}</p>
-    </div>`;
-
-  })
+        //Displays the results from the MealDB API
+        let img = document.querySelector("img")
+        img.src = myMeal.strMealThumb
+        document.getElementById('meal').innerHTML = (myMeal.strMeal);
+        document.getElementById('area').innerHTML = (myMeal.strArea);
+        document.getElementById('instructions').innerHTML = (myMeal.strInstructions);
+      })
       .catch(() => {
         result.innerHTML = `<h3>Invalid Input</h3>`;
       });
