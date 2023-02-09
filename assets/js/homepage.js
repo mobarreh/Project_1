@@ -53,7 +53,9 @@ searchBtn.addEventListener("click", () => {
         }).then(function (data) {
           console.log(data)        
         let recipeServes = document.getElementById("results-div");
-        recipeServes.innerText = `${data.hits[0].recipe.calories}`
+        recipeServes.innerHTML = ` 
+        <h1> Calories of recipe </h1>
+        <h3> ${data.hits[0].recipe.calories} </h3>`;
         });
       }
 
