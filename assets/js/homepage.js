@@ -3,21 +3,9 @@ let result = document.getElementById("result");
 let searchBtn = document.getElementById("search-btn");
 let searchBtn2 = document.getElementById("search-btn-two")
 let url = "https://www.themealdb.com/api/json/v1/1/search.php?s=";
-let endpointURLSpoonacular = "https://api.spoonacular.com/food/ingredients/substitutes?";
-let appKeySpoon = "1b359d0128f940919c6585bbcb7e80c1";
-
-function searchHistory(q) {
-  console.log(q);
-  // get items from local storage, if there are nothing in local storage set to empty array, need JSON parsing it from a string
-  var searchedIngredients = JSON.parse(localStorage.getItem('ingredients-list')) || [];
-  // pushing new values to the array
-  searchedIngredients.push(q);
-  // reset local history, JSON to put it in back to string in local storage
-  localStorage.setItem('ingredients-list', JSON.stringify(searchedIngredients));
-  renderSearchHistory();
-
-}
-
+let endpointURL = "https://api.edamam.com/search?";
+let appKey = "d14cacb88d41dac2fa92c1fd535a40c6";
+let appID = "297b61f7";
 
 //Excute MealDB API search once button is clicked
 searchBtn.addEventListener("click", () => {
@@ -48,21 +36,26 @@ searchBtn.addEventListener("click", () => {
         document.getElementById('area').innerHTML = (myMeal.strArea);
         document.getElementById('instructions').innerHTML = (myMeal.strInstructions);
         
-        var queryURLSpoonacular = endpointURLSpoonacular + "apiKey=" + appKeySpoon + "&ingredientName=";
-        fetch(queryURLSpoonacular) // wait for this fetch to finish
-            .then(function (response) {
-                return response.json();
-              
-              })
       })
       .catch(() => {
         result.innerHTML = `<h3>Invalid Input</h3>`;
       });
-
-
   };
 })
- 
- searchBtn2.addEventListener("click", () =>{
 
-})
+  function getAPI(event) {
+    event.preventDefault();
+    let q = document.getElementById("user-inp").value;
+    let queryURL = endpointURL + "q=" + q + "&app_id=" + appID + '&app_key=' + appKey; 
+    fetch(queryURL)
+        .then(function (response) {
+            return response.json();
+        }).then(function (data) {
+          console.log(data)        
+        let recipeServes = document.getElementById("results-div");
+        recipeServes.innerText = `${data.hits[0].recipe.calories}`
+        });
+      }
+
+
+searchBtn2.addEventListener("click", getAPI);
