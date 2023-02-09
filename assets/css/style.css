@@ -45,7 +45,7 @@ p {
   font-size: 1.3rem;
   text-decoration: none;
   padding: 6px 5px;
-  width: 100%;
+  width: 26%;
   display: inline;
   margin: 5px 0;
   border-radius: var(--border-radius);
@@ -151,10 +151,10 @@ p {
 }
 
 .form-input {
-  width: 100%;
-  padding: 3%;
+  width: 24%;
+  padding: 1%;
   margin: 5px 0;
-  font-size: 1.2rem;
+  font-size: 3rem;
   border: 2px solid var(--light-dark);
   border-radius: var(--border-radius);
 }

@@ -6,10 +6,11 @@ let url = "https://www.themealdb.com/api/json/v1/1/search.php?s=";
 let endpointURL = "https://api.edamam.com/search?";
 let appKey = "d14cacb88d41dac2fa92c1fd535a40c6";
 let appID = "297b61f7";
-
+let userInp;
+let previousSearches=[];
 //Excute MealDB API search once button is clicked
 searchBtn.addEventListener("click", () => {
-  let userInp = document.getElementById("user-inp").value;
+   userInp = document.getElementById("user-inp").value;
   if (userInp.length == 0) {
     result.innerHTML = `<h3>Input Field Cannot Be Empty</h3>`;
   } else {
@@ -35,14 +36,27 @@ searchBtn.addEventListener("click", () => {
         document.getElementById('meal').innerHTML = (myMeal.strMeal);
         document.getElementById('area').innerHTML = (myMeal.strArea);
         document.getElementById('instructions').innerHTML = (myMeal.strInstructions);
-        
+        storeInLocalStorage(userInp);
       })
       .catch(() => {
         result.innerHTML = `<h3>Invalid Input</h3>`;
       });
   };
 })
-
+  initPreviousSearches();
+  function initPreviousSearches(){
+    let storedSearches=localStorage.getItem("previous-searches");
+    if (storedSearches){
+      previousSearches=JSON.parse(storedSearches);
+    }
+  }
+  function storeInLocalStorage(userInp){
+    if(previousSearches.indexOf(userInp) !== -1){
+      return;
+    }
+  previousSearches.push(userInp);
+  localStorage.setItem('previous-searches',JSON.stringify(previousSearches)); 
+  }
   function getAPI(event) {
     event.preventDefault();
     let q = document.getElementById("user-inp").value;
