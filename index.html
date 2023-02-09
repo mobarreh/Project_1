@@ -14,7 +14,7 @@
 <body>
   <header class="hero">
     <h1 class="app-title">
-      <i class="fas fa-drumstick-bite"></i> Recipes 4 U
+      <i class="fas fa-drumstick-bite" class="center"></i> Recipes 4 U
     </h1>
     <p>Search for a recipe and learn how to make it!
     </p>
@@ -22,17 +22,16 @@
   
     <div class="card">
       <div class="search-container">
-        <label class="form-label" for="recipe">Recipes</label>
         <input
-          type="text"
+          type="text" class="form-input"
           placeholder="Type A Dish Name Here.."
           id="user-inp"
         />
-        <button id="search-btn">Search</button>
-        <button id="search-btn-two">Search for Calories</button>
+        <button class="search-btn"id="search-btn">Search</button>
+        <button class="search-btn" id="search-btn-two">Search for Calories</button>
       </div>
       <div id="result">
-        <img/>
+        <img class="image"/>
         <div class="details">
             <h2 id="meal"></h2>
             <h4 id="area"></h4>
