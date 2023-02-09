@@ -8,6 +8,8 @@ let appKey = "d14cacb88d41dac2fa92c1fd535a40c6";
 let appID = "297b61f7";
 let userInp;
 let previousSearches=[];
+let previousSearch = document.getElementById("previous-search")
+
 //Excute MealDB API search once button is clicked
 searchBtn.addEventListener("click", () => {
    userInp = document.getElementById("user-inp").value;
@@ -36,28 +38,15 @@ searchBtn.addEventListener("click", () => {
         document.getElementById('meal').innerHTML = (myMeal.strMeal);
         document.getElementById('area').innerHTML = (myMeal.strArea);
         document.getElementById('instructions').innerHTML = (myMeal.strInstructions);
+        //Stores user input into local storage
         storeInLocalStorage(userInp);
       })
       .catch(() => {
         result.innerHTML = `<h3>Invalid Input</h3>`;
       });
   };
-})
-  initPreviousSearches();
-  function initPreviousSearches(){
-    let storedSearches=localStorage.getItem("previous-searches");
-    if (storedSearches){
-      previousSearches=JSON.parse(storedSearches);
-    }
-  }
-  function storeInLocalStorage(userInp){
-    if(previousSearches.indexOf(userInp) !== -1){
-      return;
-    }
-  previousSearches.push(userInp);
-  localStorage.setItem('previous-searches',JSON.stringify(previousSearches)); 
-  }
-  function getAPI(event) {
+})  
+    function getAPI(event) {
     event.preventDefault();
     let q = document.getElementById("user-inp").value;
     let queryURL = endpointURL + "q=" + q + "&app_id=" + appID + '&app_key=' + appKey; 
@@ -72,6 +61,21 @@ searchBtn.addEventListener("click", () => {
         <h3> ${data.hits[0].recipe.calories} </h3>`;
         });
       }
-
-
 searchBtn2.addEventListener("click", getAPI);
+
+// Funtions to store searchs into local storage
+  initPreviousSearches();
+  function initPreviousSearches(){
+    let storedSearches=localStorage.getItem("previous-searches");
+    if (storedSearches){
+      previousSearches=JSON.parse(storedSearches);
+      previousSearch.value= previousSearches[0]
+    }
+  }
+  function storeInLocalStorage(userInp){
+    if(previousSearches.indexOf(userInp) !== -1){
+      return;
+    }
+  previousSearches.push(userInp);
+  localStorage.setItem('previous-searches',JSON.stringify(previousSearches)); 
+  }
